@@ -5,13 +5,15 @@ import java.util.Objects;
 public class Rover {
 
     private Direction directionType;
-    private int y;
-    private int x;
+    private Coordinates coordinates;
 
     public Rover(int x, int y, String direction) {
         this.setDirection(direction);
-        this.y = y;
-        this.x = x;
+        setCoordinates(x, y);
+    }
+
+    private void setCoordinates(int x, int y) {
+        this.coordinates = new Coordinates(x,y);
     }
 
     public void receive(String commandsSequence) {
@@ -53,13 +55,13 @@ public class Rover {
                 int displacement = displacement1;
 
                 if (isFacingNorth()) {
-                    y += displacement;
+                    setCoordinates(coordinates.getX(), coordinates.getY() + displacement);
                 } else if (isFacingSouth()) {
-                    y -= displacement;
+                    setCoordinates(coordinates.getX(), coordinates.getY() - displacement);
                 } else if (isFacingWest()) {
-                    x -= displacement;
+                    setCoordinates(coordinates.getX() - displacement, coordinates.getY());
                 } else {
-                    x += displacement;
+                    setCoordinates(coordinates.getX() + displacement, coordinates.getY());
                 }
             }
         }
@@ -78,24 +80,23 @@ public class Rover {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final Rover rover = (Rover) o;
-        return y == rover.y && x == rover.x && directionType == rover.directionType;
+        Rover rover = (Rover) o;
+        return directionType == rover.directionType && Objects.equals(coordinates, rover.coordinates);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(directionType, y, x);
+        return Objects.hash(directionType, coordinates);
     }
 
     @Override
     public String toString() {
         return "Rover{" +
                 "directionType=" + directionType +
-                ", y=" + y +
-                ", x=" + x +
+                ", coordinates=" + coordinates +
                 '}';
     }
 
