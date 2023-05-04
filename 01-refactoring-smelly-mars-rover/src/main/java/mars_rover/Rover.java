@@ -1,13 +1,15 @@
 package mars_rover;
 
+import java.util.Objects;
+
 public class Rover {
 
-    private String direction;
+    private Direction directionType;
     private int y;
     private int x;
 
     public Rover(int x, int y, String direction) {
-        this.direction = direction;
+        this.setDirection(direction);
         this.y = y;
         this.x = x;
     }
@@ -16,33 +18,29 @@ public class Rover {
         for (int i = 0; i < commandsSequence.length(); ++i) {
             String command = commandsSequence.substring(i, i + 1);
 
-            if (command.equals("l") || command.equals("r")) {
+            if (command.equals("l")) {
 
                 // Rotate Rover
-                if (direction.equals("N")) {
-                    if (command.equals("r")) {
-                        direction = "E";
-                    } else {
-                        direction = "W";
-                    }
-                } else if (direction.equals("S")) {
-                    if (command.equals("r")) {
-                        direction = "W";
-                    } else {
-                        direction = "E";
-                    }
-                } else if (direction.equals("W")) {
-                    if (command.equals("r")) {
-                        direction = "N";
-                    } else {
-                        direction = "S";
-                    }
+                if (isFacingNorth()) {
+                    setDirection("W");
+                } else if (isFacingSouth()) {
+                    setDirection("E");
+                } else if (isFacingWest()) {
+                    setDirection("S");
                 } else {
-                    if (command.equals("r")) {
-                        direction = "S";
-                    } else {
-                        direction = "N";
-                    }
+                    setDirection("N");
+                }
+            } else if (command.equals("r")) {
+
+                // Rotate Rover
+                if (isFacingNorth()) {
+                    setDirection("E");
+                } else if (isFacingSouth()) {
+                    setDirection("W");
+                } else if (isFacingWest()) {
+                    setDirection("N");
+                } else {
+                    setDirection("S");
                 }
             } else {
 
@@ -54,11 +52,11 @@ public class Rover {
                 }
                 int displacement = displacement1;
 
-                if (direction.equals("N")) {
+                if (isFacingNorth()) {
                     y += displacement;
-                } else if (direction.equals("S")) {
+                } else if (isFacingSouth()) {
                     y -= displacement;
-                } else if (direction.equals("W")) {
+                } else if (isFacingWest()) {
                     x -= displacement;
                 } else {
                     x += displacement;
@@ -67,33 +65,41 @@ public class Rover {
         }
     }
 
+    private boolean isFacingWest() {
+        return directionType.equals(Direction.W);
+    }
+
+    private boolean isFacingSouth() {
+        return directionType.equals(Direction.S);
+    }
+
+    private boolean isFacingNorth() {
+        return directionType.equals(Direction.N);
+    }
+
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        Rover rover = (Rover) o;
-
-        if (y != rover.y) return false;
-        if (x != rover.x) return false;
-        return direction != null ? direction.equals(rover.direction) : rover.direction == null;
-
+        final Rover rover = (Rover) o;
+        return y == rover.y && x == rover.x && directionType == rover.directionType;
     }
 
     @Override
     public int hashCode() {
-        int result = direction != null ? direction.hashCode() : 0;
-        result = 31 * result + y;
-        result = 31 * result + x;
-        return result;
+        return Objects.hash(directionType, y, x);
     }
 
     @Override
     public String toString() {
         return "Rover{" +
-            "direction='" + direction + '\'' +
-            ", y=" + y +
-            ", x=" + x +
-            '}';
+                "directionType=" + directionType +
+                ", y=" + y +
+                ", x=" + x +
+                '}';
+    }
+
+    private void setDirection(String direction) {
+        this.directionType = Direction.create(direction);
     }
 }
