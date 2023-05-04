@@ -39,4 +39,12 @@ public class Coordinates {
     public int getY() {
         return this.y;
     }
+
+    Coordinates moveAlongYAxis(final int displacement) {
+        return new Coordinates(getX(), getY() + displacement);
+    }
+
+    Coordinates moveAlongXAxis(final int displacement) {
+        return new Coordinates(getX() + displacement, getY());
+    }
 }

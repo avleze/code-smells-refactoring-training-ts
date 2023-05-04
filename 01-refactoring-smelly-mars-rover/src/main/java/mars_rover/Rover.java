@@ -55,13 +55,13 @@ public class Rover {
                 int displacement = displacement1;
 
                 if (isFacingNorth()) {
-                    setCoordinates(coordinates.getX(), coordinates.getY() + displacement);
+                    this.coordinates = coordinates.moveAlongYAxis(displacement);
                 } else if (isFacingSouth()) {
-                    setCoordinates(coordinates.getX(), coordinates.getY() - displacement);
+                    this.coordinates = coordinates.moveAlongYAxis(-displacement);
                 } else if (isFacingWest()) {
-                    setCoordinates(coordinates.getX() - displacement, coordinates.getY());
+                    this.coordinates = coordinates.moveAlongXAxis(-displacement);
                 } else {
-                    setCoordinates(coordinates.getX() + displacement, coordinates.getY());
+                    this.coordinates = coordinates.moveAlongXAxis(displacement);
                 }
             }
         }
