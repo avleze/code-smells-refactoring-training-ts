@@ -4,11 +4,11 @@ import java.util.Objects;
 
 public class Rover {
 
-    private Direction directionType;
+    private Direction direction;
     private Coordinates coordinates;
 
     public Rover(int x, int y, String direction) {
-        this.directionType = Direction.create(direction);
+        this.direction = Direction.create(direction);
         setCoordinates(x, y);
     }
 
@@ -21,9 +21,9 @@ public class Rover {
             String command = commandsSequence.substring(i, i + 1);
 
             if (command.equals("l")) {
-                this.directionType = this.directionType.rotateLeft();
+                this.direction = this.direction.rotateLeft();
             } else if (command.equals("r")) {
-                this.directionType = this.directionType.rotateRight();
+                this.direction = this.direction.rotateRight();
             } else {
 
                 // Displace Rover
@@ -34,7 +34,7 @@ public class Rover {
                 }
                 int displacement = displacement1;
 
-                this.coordinates = this.directionType.move(coordinates, displacement);
+                this.coordinates = this.direction.move(coordinates, displacement);
             }
         }
     }
@@ -44,18 +44,18 @@ public class Rover {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rover rover = (Rover) o;
-        return directionType == rover.directionType && Objects.equals(coordinates, rover.coordinates);
+        return direction == rover.direction && Objects.equals(coordinates, rover.coordinates);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(directionType, coordinates);
+        return Objects.hash(direction, coordinates);
     }
 
     @Override
     public String toString() {
         return "Rover{" +
-                "directionType=" + directionType +
+                "directionType=" + direction +
                 ", coordinates=" + coordinates +
                 '}';
     }
