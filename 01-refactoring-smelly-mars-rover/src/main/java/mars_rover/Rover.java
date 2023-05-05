@@ -8,7 +8,7 @@ public class Rover {
     private Coordinates coordinates;
 
     public Rover(int x, int y, String direction) {
-        this.setDirection(direction);
+        this.directionType = Direction.create(direction);
         setCoordinates(x, y);
     }
 
@@ -21,29 +21,9 @@ public class Rover {
             String command = commandsSequence.substring(i, i + 1);
 
             if (command.equals("l")) {
-
-                // Rotate Rover
-                if (isFacingNorth()) {
-                    setDirection("W");
-                } else if (isFacingSouth()) {
-                    setDirection("E");
-                } else if (isFacingWest()) {
-                    setDirection("S");
-                } else {
-                    setDirection("N");
-                }
+                this.directionType = this.directionType.rotateLeft();
             } else if (command.equals("r")) {
-
-                // Rotate Rover
-                if (isFacingNorth()) {
-                    setDirection("E");
-                } else if (isFacingSouth()) {
-                    setDirection("W");
-                } else if (isFacingWest()) {
-                    setDirection("N");
-                } else {
-                    setDirection("S");
-                }
+                this.directionType = this.directionType.rotateRight();
             } else {
 
                 // Displace Rover
@@ -54,29 +34,9 @@ public class Rover {
                 }
                 int displacement = displacement1;
 
-                if (isFacingNorth()) {
-                    this.coordinates = coordinates.moveAlongYAxis(displacement);
-                } else if (isFacingSouth()) {
-                    this.coordinates = coordinates.moveAlongYAxis(-displacement);
-                } else if (isFacingWest()) {
-                    this.coordinates = coordinates.moveAlongXAxis(-displacement);
-                } else {
-                    this.coordinates = coordinates.moveAlongXAxis(displacement);
-                }
+                this.coordinates = this.directionType.move(coordinates, displacement);
             }
         }
-    }
-
-    private boolean isFacingWest() {
-        return directionType.equals(Direction.W);
-    }
-
-    private boolean isFacingSouth() {
-        return directionType.equals(Direction.S);
-    }
-
-    private boolean isFacingNorth() {
-        return directionType.equals(Direction.N);
     }
 
     @Override
@@ -100,7 +60,4 @@ public class Rover {
                 '}';
     }
 
-    private void setDirection(String direction) {
-        this.directionType = Direction.create(direction);
-    }
 }
