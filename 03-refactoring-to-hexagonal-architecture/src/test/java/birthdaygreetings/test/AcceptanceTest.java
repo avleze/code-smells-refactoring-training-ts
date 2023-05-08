@@ -7,6 +7,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 
 import birthdaygreetings.BirthdayService;
+import birthdaygreetings.FileEmployeeRepository;
 import birthdaygreetings.OurDate;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AcceptanceTest {
 
     private static final int SMTP_PORT = 25;
+    private static final String EMPLOYEE_DATA_TXT = "src/test/resources/employee_data.txt";
     private List<Message> messagesSent;
     private BirthdayService service;
 
@@ -24,7 +26,7 @@ public class AcceptanceTest {
     public void setUp() throws Exception {
         messagesSent = new ArrayList<Message>();
 
-        service = new BirthdayService() {
+        service = new BirthdayService(new FileEmployeeRepository(EMPLOYEE_DATA_TXT)) {
             @Override
             protected void sendMessage(Message msg) throws MessagingException {
                 messagesSent.add(msg);
@@ -35,7 +37,7 @@ public class AcceptanceTest {
     @Test
     public void baseScenario() throws Exception {
 
-        service.sendGreetings("src/test/resources/employee_data.txt",
+        service.sendGreetings(EMPLOYEE_DATA_TXT,
                 new OurDate("2008/10/08"), "localhost", SMTP_PORT);
 
         assertEquals(1, messagesSent.size(), "message not sent?");
@@ -49,7 +51,7 @@ public class AcceptanceTest {
 
     @Test
     public void willNotSendEmailsWhenNobodysBirthday() throws Exception {
-        service.sendGreetings("src/test/resources/employee_data.txt",
+        service.sendGreetings(EMPLOYEE_DATA_TXT,
                 new OurDate("2008/01/01"), "localhost", SMTP_PORT);
 
         assertEquals(0, messagesSent.size(), "what? messages?");
