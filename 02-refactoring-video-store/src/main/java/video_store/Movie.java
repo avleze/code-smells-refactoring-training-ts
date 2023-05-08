@@ -6,23 +6,22 @@ public class Movie {
     public static final int NEW_RELEASE = 1;
 
     private String title;
-    private int priceCode;
+    private MovieType movieType;
 
     public Movie(String title, int priceCode) {
         this.title = title;
-        this.priceCode = priceCode;
-    }
-
-    public int getPriceCode() {
-        return priceCode;
-    }
-
-    public void setPriceCode(int code) {
-        priceCode = code;
+        this.movieType = MovieType.create(priceCode);
     }
 
     public String getTitle() {
         return title;
     }
 
+    public double getAmount(final int rentedDays) {
+        return movieType.getAmount(rentedDays);
+    }
+
+    public boolean isANewRelease() {
+        return movieType == MovieType.NEW_RELEASE;
+    }
 }
